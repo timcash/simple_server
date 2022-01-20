@@ -1,8 +1,9 @@
 // the client requests a question at /question?id=1
 // the server sends back a JSON object of the question
 const express = require('express');
-const app = express();
 const bodyParser = require('body-parser');
+
+const app = express();
 // add url parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -15,21 +16,32 @@ const questions = [
 
 // handle the question route
 app.get('/question/:id', (req, res) => {
-        console.log('request recieved');
-        // extract the id from the request params
-        const id = req.params.id;
-        // convert the id to a number
-        const idNum = parseInt(id);
-        // find the question in the list
-        const question = questions.find(q => q.id === idNum);
-        // set the content type to json
-        res.setHeader('Content-Type', 'application/json');
-        // send the question back to the client
-        res.json(question);
+    // extract the id from the request params
+    const id_as_string = req.params.id;
+    // convert the id to a number
+    const id_from_browser = parseInt(id_as_string);
+    // log the id received from the browser
+    console.log(`id from browser: ${id_from_browser}`);
+    // find the question in the list
+    const question = questions.find(q => q.id === id_from_browser);
+    // set the content type to json
+    res.setHeader('Content-Type', 'application/json');
+    // send the question back to the client
+    res.json(question);
 });
 
+// get the highscrore route
+app.get('/highscore', (req, res) => {
+    console.log('highscore request recieved');
+    // set the content type to json
+    res.setHeader('Content-Type', 'application/json');
+    // send the highscore back to the client
+    res.json({highscore: 100});
+});
+
+const PORT = 8080;
 // start the app
-app.listen(8080, () => {
-    console.log('Server started on port 3000');
+app.listen(PORT, () => {
+    console.log(`server started on port ${PORT}`);
 })
 
